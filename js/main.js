@@ -1,12 +1,24 @@
 // See the following on using objects as key/value dictionaries
 // https://stackoverflow.com/questions/1208222/how-to-do-associative-array-hashing-in-javascript
-var words = {};
+
 
 /** 
- * Your thoughtful comment here.
+ * Empty a stack
+ * @param {Stack} stack - The `stack` object to empty
  */
 function emptyStack(stack) {
-    // ...
+    /*
+    var len = stack.length;
+    for (var i = 0; i < len; i++) {
+	stack.pop();
+    }
+    */
+    // For stuff like this, because of the idiosyncrasies of JS,
+    // it's almost always best to just look up the answer
+    // Above is my own answer that I thought of. It runs in O(n).
+    // Below is the correct answer. It runs in O(1)
+    // See https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
+    stack.length = 0;
 }
 
 /**
