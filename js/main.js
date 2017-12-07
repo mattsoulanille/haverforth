@@ -27,7 +27,7 @@ function print(terminal, msg) {
  */
 function renderStack(stack) {
     $("#thestack").empty();
-    stack.reverse().forEach(function(element) {
+    [...stack].reverse().forEach(function(element) {
         $("#thestack").append("<tr><td>" + element + "</td></tr>");
     });
 };
@@ -45,7 +45,7 @@ function process(stack, input, terminal) {
         print(terminal,"pushing " + Number(input));
         stack.push(Number(input));
     } else if (input === ".s") {
-        print(terminal, " <" + stack.length + "> " + stack.reverse().join(" "));
+        print(terminal, " <" + stack.length + "> " + [...stack].reverse().join(" "));
     } else if (input === "+") {
         var first = stack.pop();
         var second = stack.pop();
