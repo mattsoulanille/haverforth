@@ -1,0 +1,1 @@
+At this point in the debugger, the function testfn is being defined. The JS debugger is very good at pausing and showing what variables are after being paused.

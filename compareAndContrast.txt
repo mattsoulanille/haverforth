@@ -1,0 +1,12 @@
+Perspective: This is much easier than writing it in Racket, however, if I were to actually write a complete forth interpreter, it would probably get much harder. JS is good for small projects but easily becomes messy when projects get large.
+
+Lack of Types: This was a problem when I changed my mind while writing a function but didn't change how it was called. I would have gotten a type error but instead I got a rather cryptic error message.
+
+Lack of Types again: It was 'easier' than writing in racket, but it would quickly get harder as the project grows. I would probably write this in Elm.
+
+
+Objects: Used one for the stack and for the forth interpreter.
+Maps: These are just objects in JS. Used one for the words.
+Prototypes: I generally stick to the class subclass syntactic sugar, but prototypes can be cool.
+Dynamic Typing: I hate it. I want to know about all the possible type errors before running it.
+Closures: Rather useful for the definition of new functions in forth. I frequently use '.bind(this)'

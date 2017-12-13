@@ -2,24 +2,10 @@
 // https://stackoverflow.com/questions/1208222/how-to-do-associative-array-hashing-in-javascript
 
 
-/** 
- * Empty a stack
- * @param {Stack} stack - The `stack` object to empty
- */
-function emptyStack(stack) {
-    /*
-    var len = stack.length;
-    for (var i = 0; i < len; i++) {
-	stack.pop();
-    }
-    */
-    // For stuff like this, because of the idiosyncrasies of JS,
-    // it's almost always best to just look up the answer
-    // Above is my own answer that I thought of. It runs in O(n).
-    // Below is the correct answer. It runs in O(1)
-    // See https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
-    stack.length = 0;
-}
+
+// See forth.js for emptyStack
+
+var resetButton = document.querySelector('#reset');
 
 /**
  * Print a string out to the terminal, and update its scroll to the
@@ -47,34 +33,57 @@ function renderStack(stack) {
 /** 
  * Process a user input, update the stack accordingly, write a
  * response out to some terminal.
- * @param {Array[Number]} stack - The stack to work on
- * @param {string} input - The string the user typed
+ * @param {Forth} forth - The forth object to work on
+ * @param {Array[string]} symbols - The array of symbols the user typed
  * @param {Terminal} terminal - The terminal object
  */
-function process(stack, input, terminal) {
-    // The user typed a number
-    if (!(isNaN(Number(input)))) {
-        print(terminal,"pushing " + Number(input));
-        stack.push(Number(input));
-    } else if (input === ".s") {
-        print(terminal, " <" + stack.length + "> " + [...stack].reverse().join(" "));
-    } else if (input === "+") {
-        var first = stack.pop();
-        var second = stack.pop();
-        stack.push(first+second);
-    } else {
-        print(terminal, ":-( Unrecognized input");
-    }
-    renderStack(stack);
-};
+function process(forth, symbols, terminal) {
 
-function runRepl(terminal, stack) {
-    terminal.input("Type a forth command:", function(line) {
-        print(terminal, "User typed in: " + line);
-        process(stack, line, terminal);
-        runRepl(terminal, stack);
+    symbols.forEach(function(symbol) {
+	if (symbol == ".s") {
+	    forth.print(terminal);
+	}
+	else {
+	    try {
+		forth.process(symbol);
+	    }
+	    catch(e) {
+		if (e instanceof WordError) {
+		    print(terminal, ":-( Unrecognized input");
+		}
+		else if (e instanceof UnderflowError) {
+		    print(terminal, "Stack underflow");
+		}
+		else {
+		    throw e;
+		}
+	    }
+	}
+    });
+
+    renderStack(forth.stack);
+}
+
+
+
+
+/**
+* Turn the user input string into an array of symbols
+* @param {string} input - The user's input string 
+*/
+function getSymbols(input) {
+    return input.trim().split(/\s+/); // Remove whitespace
+}
+
+function runRepl(terminal, forth) {
+    terminal.input("", function(line) {
+    //print(terminal, "User typed in: " + line);
+    var symbols = getSymbols(line);
+    process(forth, symbols, terminal);
+    runRepl(terminal, forth);
     });
 };
+
 
 // Whenever the page is finished loading, call this function. 
 // See: https://learn.jquery.com/using-jquery-core/document-ready/
@@ -87,8 +96,26 @@ $(document).ready(function() {
     // represents the terminal to the end of it.
     $("#terminal").append(terminal.html);
 
+    var forth = new Forth();
+    resetForth(forth, terminal);
+
+    // Event listener for resetting the stack
+    resetButton.addEventListener('click', resetForth.bind(this, forth, terminal));
+//    resetButton.addEventListener('click', function() {console.log(stack);});
+	
+    runRepl(terminal, forth);
+});
+
+function resetForth(forth, terminal) {
+    // Make a forth interpreter an object
+    // reset should just make a new one.
+    // Then, this would be the constructor (kind of)
+    terminal.clear();
     print(terminal, "Welcome to HaverForth! v0.1");
     print(terminal, "As you type, the stack (on the right) will be kept in sync");
+    forth.reset();
+    renderStack(forth.stack);
+    
+    
 
-    runRepl(terminal, []);
-});
+};
