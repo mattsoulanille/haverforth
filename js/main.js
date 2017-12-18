@@ -65,8 +65,6 @@ function process(forth, symbols, terminal) {
 }
 
 
-
-
 /**
 * Turn the user input string into an array of symbols
 * @param {string} input - The user's input string 
@@ -85,6 +83,23 @@ function runRepl(terminal, forth) {
 };
 
 
+// Adds a button to the DOM that calls the funciton
+function makeOnDefineFunction(forth) {
+    return function(name, fn) {
+	var b = document.createElement("button");
+	b.innerHTML = name;
+
+	var composedWithUpdateStack = function() {
+	    fn(...arguments);
+	    renderStack(forth.stack);	    
+	};
+	
+	b.addEventListener("click", composedWithUpdateStack);
+	document.getElementById('user-defined-funcs').append(b);
+    };
+}
+
+
 // Whenever the page is finished loading, call this function. 
 // See: https://learn.jquery.com/using-jquery-core/document-ready/
 $(document).ready(function() {
@@ -98,6 +113,9 @@ $(document).ready(function() {
 
     var forth = new Forth();
     resetForth(forth, terminal);
+
+    forth.events.on("defineFunction", makeOnDefineFunction(forth));
+    
 
     // Event listener for resetting the stack
     resetButton.addEventListener('click', resetForth.bind(this, forth, terminal));
@@ -115,7 +133,11 @@ function resetForth(forth, terminal) {
     print(terminal, "As you type, the stack (on the right) will be kept in sync");
     forth.reset();
     renderStack(forth.stack);
-    
-    
 
+    // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+    var funcButtons = document.getElementById('user-defined-funcs');
+    while (funcButtons.firstChild) {
+	funcButtons.removeChild(funcButtons.firstChild);
+    }
+    
 };

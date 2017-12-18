@@ -4,8 +4,9 @@ class WordError extends Error {};
 
 
 class Forth {
-    constructor() {
+    constructor(defineCallback) {
 	this.reset();
+	this.events = new EventEmitter();
     }
     defineFunction(symbols) {
 	var name = symbols[0];
@@ -19,6 +20,7 @@ class Forth {
 
 	}.bind(this);
 
+	this.events.emit("defineFunction", name, this.words[name]);
     }
     reset() {
 	this.stack = new Stack();
