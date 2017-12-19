@@ -54,14 +54,15 @@ function process(forth, symbols, terminal) {
 		else if (e instanceof UnderflowError) {
 		    print(terminal, "Stack underflow");
 		}
+		else if (e instanceof FunctionDefinitionError) {
+		    print(terminal, e.message);
+		}
 		else {
 		    throw e;
 		}
 	    }
 	}
     });
-
-    renderStack(forth.stack);
 }
 
 
@@ -88,13 +89,8 @@ function makeOnDefineFunction(forth) {
     return function(name, fn) {
 	var b = document.createElement("button");
 	b.innerHTML = name;
-
-	var composedWithUpdateStack = function() {
-	    fn(...arguments);
-	    renderStack(forth.stack);	    
-	};
 	
-	b.addEventListener("click", composedWithUpdateStack);
+	b.addEventListener("click", fn);
 	document.getElementById('user-defined-funcs').append(b);
     };
 }
@@ -115,11 +111,10 @@ $(document).ready(function() {
     resetForth(forth, terminal);
 
     forth.events.on("defineFunction", makeOnDefineFunction(forth));
-    
+    forth.stack.events.on("updateStack", function() {renderStack(forth.stack);}); // probably bad practice
 
     // Event listener for resetting the stack
     resetButton.addEventListener('click', resetForth.bind(this, forth, terminal));
-//    resetButton.addEventListener('click', function() {console.log(stack);});
 	
     runRepl(terminal, forth);
 });
@@ -132,8 +127,7 @@ function resetForth(forth, terminal) {
     print(terminal, "Welcome to HaverForth! v0.1");
     print(terminal, "As you type, the stack (on the right) will be kept in sync");
     forth.reset();
-    renderStack(forth.stack);
-
+    
     // https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
     var funcButtons = document.getElementById('user-defined-funcs');
     while (funcButtons.firstChild) {
