@@ -291,8 +291,8 @@ var words = function() {
     function swap(stack) {
 	var a = stack.pop();
 	var b = stack.pop();
-	stack.push(b);
 	stack.push(a);
+	stack.push(b);
     };
 
     function dup(stack) {
