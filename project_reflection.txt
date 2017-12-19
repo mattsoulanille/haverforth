@@ -1,0 +1,22 @@
+Most challenging part of lab:
+     I'm somewhat familiar with JS, so the most challenging part of the lab was probably writing the AST for making nested 'if's work. That's just difficult in general, though.
+
+
+What I enjoyed about JS:
+     The ability to do somewhat insane things like extend the array class into my own stack class. JS lets you do pretty much whatever you want whether or not it's reasonable.
+
+What I least enjoyed about JS:
+     The ability to do whatever you want is a double edged sword. Writing stuff without static type checking and without rigorous / strict restrictions on what you're allowed to do can easily result in spaghetti code. In particular, I really missed static type checking when I was writing the AST.
+
+Would you choose JS for this task:
+      No. Absolutely not. JS is not a fun language to implement another language in. The lack of static type checking and errors in general makes it really hard to debug. I would choose typed racket or Haskell.
+
+Lack of types:
+     The lack of types was fine when I was just organizing things in the DOM, but it was unhelpful when I wrote more involved parts of the lab like the forth interpreter.
+
+Concepts from class that were helpful:
+	 Writing stuff in racket during this class forced me to use recursion more that I normally would, and this was helpful when thinking about how to write the symbols to AST parser that I ended up writing.
+
+Add one feature:
+    I would probably do something with PIXI.js. It's a nice graphics library for JavaScript that can draw things on the screen. I might have made some functions for drawing shapes or manipulating sprites on the screen.
+     
