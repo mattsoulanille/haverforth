@@ -176,6 +176,8 @@ class Forth {
 
 class UnderflowError extends Error {}
 
+// The stack class implements the events system described in 10
+// by using an events library: EventEmitter.js
 class Stack extends Array {
    constructor() {
        super(...arguments);
